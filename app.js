@@ -1,4 +1,4 @@
-const DATA_PATH = "./data/qb_captain_rows.sample.json";
+const DATA_PATH = "./data/qb_captain_rows.json";
 
 let rows = [];
 let filtered = [];
