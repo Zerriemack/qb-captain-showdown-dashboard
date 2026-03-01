@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QB Captain Showdown Dashboard</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-inner">
+        <h1>QB Captain Showdown Dashboard</h1>
+        <p class="sub">
+          Filters update every chart. Sample data for now.
+        </p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <h2>Filters</h2>
+        <div class="filters">
+          <label>
+            Season
+            <select id="seasonSelect"></select>
+          </label>
+
+          <label>
+            Captain Team
+            <select id="teamSelect"></select>
+          </label>
+
+          <label>
+            Min Captain Ownership %
+            <input id="minOwn" type="number" step="0.1" value="0" />
+          </label>
+
+          <label>
+            Min Salary Left
+            <input id="minLeft" type="number" step="100" value="0" />
+          </label>
+
+          <button id="resetBtn" type="button">Reset</button>
+        </div>
+      </section>
+
+      <section class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">QB Captain Wins</div>
+          <div class="kpi-value" id="kpiCount">0</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avg Winner Points</div>
+          <div class="kpi-value" id="kpiPts">0</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avg Captain Ownership %</div>
+          <div class="kpi-value" id="kpiOwn">0</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avg Salary Left</div>
+          <div class="kpi-value" id="kpiLeft">0</div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h3>QB Captain wins by season</h3>
+          <div id="chartBySeason" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>Captain ownership distribution</h3>
+          <div id="chartOwnership" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>Salary left distribution</h3>
+          <div id="chartSalaryLeft" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h3>Build archetypes (simple)</h3>
+          <div id="chartArchetypes" class="chart"></div>
+          <p class="note">
+            Archetype here = pass catchers paired with Captain QB from same team.
+          </p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Rows</h3>
+        <div class="table-wrap">
+          <table id="rowsTable">
+            <thead>
+              <tr>
+                <th>Season</th>
+                <th>Week</th>
+                <th>Slate</th>
+                <th>Captain</th>
+                <th>Team</th>
+                <th>Own %</th>
+                <th>Winner Pts</th>
+                <th>Salary Left</th>
+                <th>Pass Catchers</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

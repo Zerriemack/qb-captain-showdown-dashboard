@@ -1,0 +1,46 @@
+[
+  {
+    "season": 2024,
+    "week": 1,
+    "slateTag": "MNF",
+    "captainName": "Josh Allen",
+    "captainTeam": "BUF",
+    "captainOwnershipPercent": 14.2,
+    "winnerPoints": 168.44,
+    "salaryLeft": 600,
+    "captainPassCatchersCount": 2
+  },
+  {
+    "season": 2024,
+    "week": 2,
+    "slateTag": "TNF",
+    "captainName": "Patrick Mahomes",
+    "captainTeam": "KC",
+    "captainOwnershipPercent": 9.8,
+    "winnerPoints": 154.12,
+    "salaryLeft": 1200,
+    "captainPassCatchersCount": 1
+  },
+  {
+    "season": 2023,
+    "week": 11,
+    "slateTag": "SNF",
+    "captainName": "Jalen Hurts",
+    "captainTeam": "PHI",
+    "captainOwnershipPercent": 18.6,
+    "winnerPoints": 146.9,
+    "salaryLeft": 0,
+    "captainPassCatchersCount": 0
+  },
+  {
+    "season": 2023,
+    "week": 5,
+    "slateTag": "MNF",
+    "captainName": "Joe Burrow",
+    "captainTeam": "CIN",
+    "captainOwnershipPercent": 6.4,
+    "winnerPoints": 137.66,
+    "salaryLeft": 800,
+    "captainPassCatchersCount": 2
+  }
+]
