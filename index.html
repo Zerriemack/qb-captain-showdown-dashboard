@@ -12,7 +12,7 @@
       <div class="header-inner">
         <h1>QB Captain Showdown Dashboard</h1>
         <p class="sub">
-          Filters update every chart. Sample data for now.
+          A synthesis tool for high volume DraftKings NFL Showdown players. Filter first place QB Captain lineups to see ownership, salary left, and construction patterns.
         </p>
       </div>
     </header>
@@ -45,6 +45,29 @@
         </div>
       </section>
 
+      <section class="grid" style="margin-top: 12px;">
+        <div class="card">
+          <h3>How to use this dashboard</h3>
+          <p class="note" style="margin-top: 8px;">
+            This dataset includes first place DraftKings NFL Showdown winning lineups where the Captain is a QB. Use filters to isolate a team, season, or ownership range, then compare how winners were built.
+          </p>
+          <ul class="note" style="margin: 10px 0 0 18px;">
+            <li>Use ownership and salary left to understand how “popular” or “different” QB Captain winners were.</li>
+            <li>Use stack depth to see how often a QB Captain needed one, two, or more pass catchers from his team.</li>
+            <li>Turn patterns into rules you can test across a portfolio rather than reacting to one slate.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Data notes</h3>
+          <ul class="note" style="margin: 10px 0 0 18px;">
+            <li>This shows patterns inside QB Captain winners only.</li>
+            <li>It does not measure how often QB Captain appears across the full contest field.</li>
+            <li>Use it for decision support and review, not as a guarantee.</li>
+          </ul>
+        </div>
+      </section>
+
       <section class="kpis">
         <div class="kpi">
           <div class="kpi-label">QB Captain Wins</div>
@@ -66,25 +89,25 @@
 
       <section class="grid">
         <div class="card">
-          <h3>QB Captain wins by season</h3>
+          <h3>QB Captain winners in dataset by season</h3>
           <div id="chartBySeason" class="chart"></div>
         </div>
 
         <div class="card">
-          <h3>Captain ownership distribution</h3>
+          <h3>Captain ownership distribution for QB Captain wins</h3>
           <div id="chartOwnership" class="chart"></div>
         </div>
 
         <div class="card">
-          <h3>Salary left distribution</h3>
+          <h3>Salary left distribution for QB Captain wins</h3>
           <div id="chartSalaryLeft" class="chart"></div>
         </div>
 
         <div class="card">
-          <h3>Build archetypes (simple)</h3>
+          <h3>Stack depth: pass catchers from Captain QB team</h3>
           <div id="chartArchetypes" class="chart"></div>
           <p class="note">
-            Archetype here = pass catchers paired with Captain QB from same team.
+            Stack depth counts WR and TE from the Captain QB’s team in FLEX.
           </p>
         </div>
       </section>
@@ -97,18 +120,73 @@
               <tr>
                 <th>Season</th>
                 <th>Week</th>
-                <th>Slate</th>
+                <th>Slate type</th>
                 <th>Captain</th>
                 <th>Team</th>
                 <th>Own %</th>
                 <th>Winner Pts</th>
                 <th>Salary Left</th>
                 <th>Pass Catchers</th>
+                <th>File</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
+        <p class="note" style="margin-top: 10px;">
+          File links the row back to the source JSON used to generate the dataset.
+        </p>
+      </section>
+
+      <section class="card" style="margin-top: 12px;">
+        <h3>Sources and attribution</h3>
+        <p class="note" style="margin-top: 8px;">
+          This dashboard is part of Milly Map, a curated reference system for winning large field NFL DraftKings tournaments, built around contest rules, slate research, constraint based lineup building, and a review loop for improvement.
+        </p>
+
+        <ul class="note" style="margin: 10px 0 0 18px;">
+          <li>
+            <a href="https://github.com/Zerriemack/milly-map-sources" target="_blank" rel="noreferrer">
+              Milly Map Sources repo
+            </a>
+          </li>
+          <li>
+            <a href="https://help.draftkings.com/hc/en-us/articles/4405233935123-NFL" target="_blank" rel="noreferrer">
+              DraftKings NFL rules
+            </a>
+            and
+            <a href="https://help.draftkings.com/hc/en-us/articles/4405231687571-NFL-Scoring" target="_blank" rel="noreferrer">
+              DraftKings NFL scoring
+            </a>
+          </li>
+          <li>
+            <a href="https://www.fantasycruncher.com/contest-links/NFL" target="_blank" rel="noreferrer">
+              FantasyCruncher contest links
+            </a>
+          </li>
+          <li>
+            <a href="https://www.runthesims.com/" target="_blank" rel="noreferrer">
+              Run The Sims (SimRunner)
+            </a>
+          </li>
+          <li>
+            <a href="https://arxiv.org/abs/1604.01455" target="_blank" rel="noreferrer">
+              Hunter, Vielma, and Zaman, “Picking Winners in Daily Fantasy Sports Using Integer Programming”
+            </a>
+          </li>
+          <li>
+            Mlcoch and Hubacek, “Competing in Daily Fantasy Sports Using Generative Models” (course file)
+          </li>
+          <li>
+            <a href="https://youtu.be/aNvc_IeTPog?si=P4KeSKN3R82WmTzf" target="_blank" rel="noreferrer">
+              Kyle Krims, The Sauce Network, matchup breakdown video
+            </a>
+          </li>
+        </ul>
+
+        <p class="note" style="margin-top: 10px;">
+          Winner lineup data in this dashboard is compiled from tracked first place DraftKings NFL Showdown contests stored as JSON files in this repository.
+        </p>
       </section>
     </main>
 

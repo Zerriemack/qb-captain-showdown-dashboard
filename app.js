@@ -168,16 +168,17 @@ function renderTable() {
   for (const r of sorted) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${r.season}</td>
-      <td>${r.week}</td>
-      <td>${r.slateTag}</td>
-      <td>${r.captainName}</td>
-      <td>${r.captainTeam}</td>
-      <td>${fmt(r.captainOwnershipPercent, 1)}</td>
-      <td>${fmt(r.winnerPoints, 2)}</td>
-      <td>${fmt(r.salaryLeft, 0)}</td>
-      <td>${r.captainPassCatchersCount}</td>
-    `;
+  <td>${r.season}</td>
+  <td>${r.week}</td>
+  <td>${r.slateTag}</td>
+  <td>${r.captainName}</td>
+  <td>${r.captainTeam}</td>
+  <td>${fmt(r.captainOwnershipPercent, 1)}</td>
+  <td>${fmt(r.winnerPoints, 2)}</td>
+  <td>${fmt(r.salaryLeft, 0)}</td>
+  <td>${r.captainPassCatchersCount}</td>
+  <td>${r.sourceFile ?? ""}</td>
+`;
     els.tableBody.appendChild(tr);
   }
 }
