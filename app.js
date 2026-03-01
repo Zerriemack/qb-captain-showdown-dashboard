@@ -13,7 +13,14 @@ const els = {
   kpiPts: document.getElementById("kpiPts"),
   kpiOwn: document.getElementById("kpiOwn"),
   kpiLeft: document.getElementById("kpiLeft"),
-  tableBody: document.querySelector("#rowsTable tbody")
+  tableBody: document.querySelector("#rowsTable tbody"),
+
+  // Takeaways panel
+  tWins: document.getElementById("tWins"),
+  tPct2Plus: document.getElementById("tPct2Plus"),
+  tModeDepth: document.getElementById("tModeDepth"),
+  tMedianOwn: document.getElementById("tMedianOwn"),
+  tMedianLeft: document.getElementById("tMedianLeft"),
 };
 
 function uniq(arr) {
@@ -27,6 +34,43 @@ function avg(nums) {
 
 function fmt(n, digits = 2) {
   return Number.isFinite(n) ? n.toFixed(digits) : "0.00";
+}
+
+function pct(n, digits = 1) {
+  if (!Number.isFinite(n)) return "0.0%";
+  return `${n.toFixed(digits)}%`;
+}
+
+function median(nums) {
+  const xs = nums.filter(Number.isFinite).slice().sort((a, b) => a - b);
+  const n = xs.length;
+  if (n === 0) return 0;
+  const mid = Math.floor(n / 2);
+  return n % 2 === 0 ? (xs[mid - 1] + xs[mid]) / 2 : xs[mid];
+}
+
+function modeLabelForDepth(n) {
+  if (n <= 0) return "0 pass catchers";
+  if (n === 1) return "1 pass catcher";
+  if (n === 2) return "2 pass catchers";
+  return "3+ pass catchers";
+}
+
+function modeDepthLabel(rowsIn) {
+  const counts = new Map();
+  for (const r of rowsIn) {
+    const label = modeLabelForDepth(r.captainPassCatchersCount);
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  let bestLabel = "-";
+  let bestCount = -1;
+  for (const [label, c] of counts.entries()) {
+    if (c > bestCount) {
+      bestCount = c;
+      bestLabel = label;
+    }
+  }
+  return bestLabel;
 }
 
 function buildSelect(selectEl, values, allLabel) {
@@ -50,7 +94,7 @@ function applyFilters() {
   const minOwn = Number(els.minOwn.value || 0);
   const minLeft = Number(els.minLeft.value || 0);
 
-  filtered = rows.filter(r => {
+  filtered = rows.filter((r) => {
     if (season !== null && r.season !== season) return false;
     if (team !== null && r.captainTeam !== team) return false;
     if (r.captainOwnershipPercent < minOwn) return false;
@@ -59,6 +103,7 @@ function applyFilters() {
   });
 
   renderKPIs();
+  renderTakeaways();
   renderCharts();
   renderTable();
 }
@@ -66,43 +111,50 @@ function applyFilters() {
 function renderKPIs() {
   els.kpiCount.textContent = String(filtered.length);
 
-  const pts = avg(filtered.map(r => r.winnerPoints));
-  const own = avg(filtered.map(r => r.captainOwnershipPercent));
-  const left = avg(filtered.map(r => r.salaryLeft));
+  const pts = avg(filtered.map((r) => r.winnerPoints));
+  const own = avg(filtered.map((r) => r.captainOwnershipPercent));
+  const left = avg(filtered.map((r) => r.salaryLeft));
 
   els.kpiPts.textContent = fmt(pts, 2);
   els.kpiOwn.textContent = fmt(own, 2);
   els.kpiLeft.textContent = fmt(left, 0);
 }
 
+function renderTakeaways() {
+  if (!els.tWins) return;
+
+  const n = filtered.length;
+  els.tWins.textContent = String(n);
+
+  if (n === 0) {
+    els.tPct2Plus.textContent = "0%";
+    els.tModeDepth.textContent = "-";
+    els.tMedianOwn.textContent = "0%";
+    els.tMedianLeft.textContent = "0";
+    return;
+  }
+
+  const pct2Plus =
+    (filtered.filter((r) => r.captainPassCatchersCount >= 2).length / n) * 100;
+
+  els.tPct2Plus.textContent = pct(pct2Plus, 1);
+  els.tModeDepth.textContent = modeDepthLabel(filtered);
+
+  const medOwn = median(filtered.map((r) => r.captainOwnershipPercent));
+  const medLeft = median(filtered.map((r) => r.salaryLeft));
+
+  els.tMedianOwn.textContent = pct(medOwn, 1);
+  els.tMedianLeft.textContent = fmt(medLeft, 0);
+}
+
 function renderCharts() {
-  renderBySeason();
   renderOwnershipHist();
   renderSalaryLeftHist();
   renderArchetypes();
 }
 
-function renderBySeason() {
-  const seasons = uniq(filtered.map(r => r.season));
-  const counts = seasons.map(s => filtered.filter(r => r.season === s).length);
-
-  Plotly.newPlot(
-    "chartBySeason",
-    [{ type: "bar", x: seasons, y: counts }],
-    {
-      margin: { t: 10, l: 40, r: 10, b: 40 },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
-      font: { color: "#e5e7eb" },
-      xaxis: { title: "Season" },
-      yaxis: { title: "Wins" }
-    },
-    { displayModeBar: false, responsive: true }
-  );
-}
-
 function renderOwnershipHist() {
-  const xs = filtered.map(r => r.captainOwnershipPercent);
+  const xs = filtered.map((r) => r.captainOwnershipPercent);
   Plotly.newPlot(
     "chartOwnership",
     [{ type: "histogram", x: xs, nbinsx: 12 }],
@@ -112,14 +164,14 @@ function renderOwnershipHist() {
       plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: "#e5e7eb" },
       xaxis: { title: "Captain ownership %" },
-      yaxis: { title: "Count" }
+      yaxis: { title: "Count" },
     },
     { displayModeBar: false, responsive: true }
   );
 }
 
 function renderSalaryLeftHist() {
-  const xs = filtered.map(r => r.salaryLeft);
+  const xs = filtered.map((r) => r.salaryLeft);
   Plotly.newPlot(
     "chartSalaryLeft",
     [{ type: "histogram", x: xs, nbinsx: 12 }],
@@ -129,7 +181,7 @@ function renderSalaryLeftHist() {
       plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: "#e5e7eb" },
       xaxis: { title: "Salary left" },
-      yaxis: { title: "Count" }
+      yaxis: { title: "Count" },
     },
     { displayModeBar: false, responsive: true }
   );
@@ -143,8 +195,10 @@ function renderArchetypes() {
     return "3+ pass catchers";
   };
 
-  const buckets = uniq(filtered.map(r => bucketLabel(r.captainPassCatchersCount)));
-  const counts = buckets.map(b => filtered.filter(r => bucketLabel(r.captainPassCatchersCount) === b).length);
+  const buckets = uniq(filtered.map((r) => bucketLabel(r.captainPassCatchersCount)));
+  const counts = buckets.map(
+    (b) => filtered.filter((r) => bucketLabel(r.captainPassCatchersCount) === b).length
+  );
 
   Plotly.newPlot(
     "chartArchetypes",
@@ -154,8 +208,8 @@ function renderArchetypes() {
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: "#e5e7eb" },
-      xaxis: { title: "Archetype" },
-      yaxis: { title: "Count" }
+      xaxis: { title: "Stack depth bucket" },
+      yaxis: { title: "Count" },
     },
     { displayModeBar: false, responsive: true }
   );
@@ -163,22 +217,29 @@ function renderArchetypes() {
 
 function renderTable() {
   els.tableBody.innerHTML = "";
-  const sorted = [...filtered].sort((a, b) => (b.winnerPoints - a.winnerPoints));
+  const sorted = [...filtered].sort((a, b) => b.winnerPoints - a.winnerPoints);
 
   for (const r of sorted) {
     const tr = document.createElement("tr");
+
+    const file = r.sourceFile ?? "";
+    const fileCell = file
+      ? `<a class="file-link" href="./raw/${file}" target="_blank" rel="noopener">${file}</a>`
+      : "";
+
     tr.innerHTML = `
-  <td>${r.season}</td>
-  <td>${r.week}</td>
-  <td>${r.slateTag}</td>
-  <td>${r.captainName}</td>
-  <td>${r.captainTeam}</td>
-  <td>${fmt(r.captainOwnershipPercent, 1)}</td>
-  <td>${fmt(r.winnerPoints, 2)}</td>
-  <td>${fmt(r.salaryLeft, 0)}</td>
-  <td>${r.captainPassCatchersCount}</td>
-  <td>${r.sourceFile ?? ""}</td>
-`;
+      <td>${r.season}</td>
+      <td>${r.week}</td>
+      <td>${r.slateTag}</td>
+      <td>${r.captainName}</td>
+      <td>${r.captainTeam}</td>
+      <td>${fmt(r.captainOwnershipPercent, 1)}</td>
+      <td>${fmt(r.winnerPoints, 2)}</td>
+      <td>${fmt(r.salaryLeft, 0)}</td>
+      <td>${r.captainPassCatchersCount}</td>
+      <td>${fileCell}</td>
+    `;
+
     els.tableBody.appendChild(tr);
   }
 }
@@ -203,8 +264,8 @@ async function init() {
   const res = await fetch(DATA_PATH);
   rows = await res.json();
 
-  buildSelect(els.seasonSelect, uniq(rows.map(r => r.season)), "All seasons");
-  buildSelect(els.teamSelect, uniq(rows.map(r => r.captainTeam)), "All teams");
+  buildSelect(els.seasonSelect, uniq(rows.map((r) => r.season)), "All seasons");
+  buildSelect(els.teamSelect, uniq(rows.map((r) => r.captainTeam)), "All teams");
 
   wireEvents();
   applyFilters();

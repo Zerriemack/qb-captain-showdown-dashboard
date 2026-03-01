@@ -89,9 +89,55 @@
 
       <section class="grid">
         <div class="card">
-          <h3>QB Captain winners in dataset by season</h3>
-          <div id="chartBySeason" class="chart"></div>
-        </div>
+  <h3>2025 takeaways you can copy</h3>
+
+  <p class="note" style="margin-top: 8px;">
+    This is a QB Captain winners only view. Use it as a playbook for how first place QB Captain lineups were actually constructed.
+  </p>
+
+  <div class="takeaways" style="margin-top: 10px;">
+    <div class="takeaway">
+      <div class="takeaway-label">QB Captain wins in sample</div>
+      <div class="takeaway-value" id="tWins">0</div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Wins with 2+ pass catchers</div>
+      <div class="takeaway-value" id="tPct2Plus">0%</div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Most common stack depth</div>
+      <div class="takeaway-value" id="tModeDepth">-</div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Median Captain ownership</div>
+      <div class="takeaway-value" id="tMedianOwn">0%</div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Median salary left</div>
+      <div class="takeaway-value" id="tMedianLeft">0</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top: 12px;">
+    <div class="callout-title">If your goal is at least one QB Captain win in a season</div>
+    <ul class="note" style="margin: 8px 0 0 18px;">
+      <li>
+        Treat <strong>2 pass catchers</strong> as your default starting point, then use the slate to decide when to push to 3+ or pull back to 1.
+      </li>
+      <li>
+        Do not force low ownership for its own sake. This sample includes winners at both low and high ownership.
+        Use <strong>salary left</strong> as a second lever to reduce duplication when ownership is high.
+      </li>
+      <li>
+        Use this page to set guardrails, then run your optimizer with those constraints and track which rule set produced your best portfolio results.
+      </li>
+    </ul>
+  </div>
+</div>
 
         <div class="card">
           <h3>Captain ownership distribution for QB Captain wins</h3>
